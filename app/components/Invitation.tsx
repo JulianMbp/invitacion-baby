@@ -2,8 +2,28 @@
 
 import { motion } from 'framer-motion';
 import { Baby, Heart, Sparkles } from 'lucide-react';
+import { Guest } from '../lib/nocodb';
 
-export default function Invitation() {
+interface InvitationProps {
+    guest?: Guest;
+}
+
+export default function Invitation({ guest }: InvitationProps) {
+    // Función para obtener el saludo personalizado
+    const getGreeting = () => {
+        if (!guest) return '';
+        
+        const nombre = guest['Nombre Representante'];
+        const integrantes = guest['N° Integrantes'] || 1;
+        
+        if (integrantes > 2) {
+            return `${nombre} y flia`;
+        } else if (integrantes === 2) {
+            return `${nombre} y acompañante`;
+        } else {
+            return nombre;
+        }
+    };
     return (
         <div className="text-center space-y-10 py-12 px-4 relative">
             {/* Floating decorative elements */}
@@ -43,6 +63,22 @@ export default function Invitation() {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="space-y-4 relative z-10"
             >
+                {guest && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2, duration: 0.6 }}
+                        className="mb-6"
+                    >
+                        <p className="text-lg text-slate-600 font-medium">
+                            Querido{guest['N° Integrantes'] > 1 ? 's' : ''}
+                        </p>
+                        <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text mt-2">
+                            {getGreeting()}
+                        </h2>
+                    </motion.div>
+                )}
+                
                 <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}

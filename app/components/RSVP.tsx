@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti';
 import { motion } from 'framer-motion';
 import { Calendar, Check, Heart, X } from 'lucide-react';
 import { useState } from 'react';
+import { ConfirmationStatus } from '../lib/constants';
 import { Guest, confirmGuestAttendance } from '../lib/nocodb';
 
 interface RSVPProps {
@@ -15,19 +16,18 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
     const [loading, setLoading] = useState(false);
     const [selectingIntegrantes, setSelectingIntegrantes] = useState(false);
 
-    const handleConfirm = async (status: boolean, integrantesConfirmados?: number) => {
+    const handleConfirm = async (status: ConfirmationStatus, integrantesConfirmados?: number) => {
         setLoading(true);
         try {
             await confirmGuestAttendance(guest.Id, status, integrantesConfirmados);
             const updatedGuest = {
                 ...guest,
-                Confirmado: status,
-                confirmacion: status, // Update confirmacion field
+                confirmacion: status, // Update confirmacion field with enum value
                 'N° de Integrantes confirmados': integrantesConfirmados,
             };
             onUpdate(updatedGuest);
 
-            if (status) {
+            if (status === ConfirmationStatus.CONFIRMED) {
                 // Enhanced confetti
                 const count = 200;
                 const defaults = {
@@ -59,17 +59,17 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
     };
 
     const handleSelectIntegrantes = (numIntegrantes: number) => {
-        handleConfirm(true, numIntegrantes);
+        handleConfirm(ConfirmationStatus.CONFIRMED, numIntegrantes);
     };
 
     const numIntegrantes = guest['N° Integrantes'] || 1;
     
-    // Check both Confirmado and confirmacion fields for compatibility
-    const isConfirmed = guest.Confirmado !== undefined && guest.Confirmado !== null 
-        ? guest.Confirmado 
-        : (guest.confirmacion !== undefined && guest.confirmacion !== null ? guest.confirmacion : null);
+    // Check confirmation status: 1=Pending, 2=Confirmed, 3=Declined
+    const confirmationStatus = guest.confirmacion;
 
-    if (isConfirmed !== null && isConfirmed !== undefined) {
+    // If status is CONFIRMED (2) or DECLINED (3), show the result message
+    if (confirmationStatus === ConfirmationStatus.CONFIRMED || confirmationStatus === ConfirmationStatus.DECLINED) {
+        const isConfirmed = confirmationStatus === ConfirmationStatus.CONFIRMED;
         return (
             <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -126,8 +126,7 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                         onClick={() => {
                             onUpdate({ 
                                 ...guest, 
-                                Confirmado: undefined, 
-                                confirmacion: undefined,
+                                confirmacion: ConfirmationStatus.PENDING,
                                 'N° de Integrantes confirmados': undefined 
                             });
                             setSelectingIntegrantes(false);
@@ -187,7 +186,7 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                                 if (numIntegrantes > 1) {
                                     setSelectingIntegrantes(true);
                                 } else {
-                                    handleConfirm(true, 1);
+                                    handleConfirm(ConfirmationStatus.CONFIRMED, 1);
                                 }
                             }}
                             disabled={loading}
@@ -225,7 +224,7 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                         </motion.button>
                         
                         <motion.button
-                            onClick={() => handleConfirm(false)}
+                            onClick={() => handleConfirm(ConfirmationStatus.DECLINED)}
                             disabled={loading}
                             whileHover={{ scale: loading ? 1 : 1.05, y: -2 }}
                             whileTap={{ scale: loading ? 1 : 0.95 }}

@@ -9,7 +9,7 @@ import Invitation from './components/Invitation';
 import InvitationCard from './components/InvitationCard';
 import Login from './components/Login';
 import RSVP from './components/RSVP';
-import { EVENT_INFO } from './lib/constants';
+import { ConfirmationStatus, EVENT_INFO } from './lib/constants';
 import { Guest } from './lib/nocodb';
 
 export default function Home() {
@@ -104,13 +104,14 @@ export default function Home() {
           </motion.div>
 
           {/* Invitación inicial con nombres (siempre visible) */}
-          <Invitation />
+          <Invitation guest={user} />
                             {/* Card de Invitación */}
                             <InvitationCard 
                     fecha={EVENT_INFO.fecha}
                     hora={EVENT_INFO.hora}
                     lugar={EVENT_INFO.lugar}
                     direccion={EVENT_INFO.direccion}
+                    guest={user}
                   />
 
           <div className="mt-8 px-4">
@@ -120,7 +121,7 @@ export default function Home() {
             />
 
             <AnimatePresence>
-              {(user.Confirmado || user.confirmacion) && (
+              {user.confirmacion === ConfirmationStatus.CONFIRMED && (
                 <motion.div
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}

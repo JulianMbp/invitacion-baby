@@ -1,4 +1,4 @@
-import { NOCODB_API_TOKEN, NOCODB_API_URL, TABLES } from './constants';
+import { ConfirmationStatus, NOCODB_API_TOKEN, NOCODB_API_URL, TABLES } from './constants';
 
 export interface Guest {
     Id: number;
@@ -7,8 +7,8 @@ export interface Guest {
     Residencia?: string;
     Celular?: string;
     correo?: string;
-    Confirmado?: boolean; // Assumed boolean field
-    confirmacion?: boolean; // Checkbox field for confirmation
+    Confirmado?: boolean; // Old field - deprecated
+    confirmacion?: number; // Enum: 1=Pending, 2=Confirmed, 3=Declined
     'N° de Integrantes confirmados'?: number; // Number of confirmed attendees
     invited?: boolean; // internal flag
 }
@@ -55,7 +55,7 @@ export async function getGuestById(id: string | number): Promise<Guest | null> {
     }
 }
 
-export async function confirmGuestAttendance(id: number, confirmed: boolean, integrantesConfirmados?: number): Promise<any> {
+export async function confirmGuestAttendance(id: number, status: ConfirmationStatus, integrantesConfirmados?: number): Promise<any> {
     // Get the full record first to include all fields in the update
     const currentRecord = await getGuestById(id);
     if (!currentRecord) {
@@ -68,15 +68,14 @@ export async function confirmGuestAttendance(id: number, confirmed: boolean, int
     // Prepare update object
     const updateData: any = {
         ...recordToUpdate,
-        Confirmado: confirmed,
-        confirmacion: confirmed, // Update both fields for compatibility
+        confirmacion: status, // Set the confirmation status enum value
     };
     
-    // If confirming attendance and integrantesConfirmados is provided, update it
-    if (confirmed && integrantesConfirmados !== undefined) {
+    // If confirming attendance (status = 2) and integrantesConfirmados is provided, update it
+    if (status === ConfirmationStatus.CONFIRMED && integrantesConfirmados !== undefined) {
         updateData['N° de Integrantes confirmados'] = integrantesConfirmados;
-    } else if (!confirmed) {
-        // If not confirming, reset integrantes confirmados
+    } else if (status === ConfirmationStatus.DECLINED) {
+        // If declined, reset integrantes confirmados
         updateData['N° de Integrantes confirmados'] = null;
     }
     

@@ -5,6 +5,13 @@ export const TABLES = {
   GIFTS: "moba9dsegr191su",
 };
 
+// Enum para el estado de confirmación
+export enum ConfirmationStatus {
+  PENDING = 1,      // En espera (no ha abierto el link)
+  CONFIRMED = 2,    // Confirmado (asistirá)
+  DECLINED = 3      // No podrá asistir
+}
+
 // Información del evento
 export const EVENT_INFO = {
   fecha: "Sábado, 15 de Marzo",

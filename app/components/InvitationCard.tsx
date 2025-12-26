@@ -3,20 +3,38 @@
 import { motion } from 'framer-motion';
 import { Baby, Calendar, Clock, Download, Heart, MapPin, Sparkles } from 'lucide-react';
 import { useRef } from 'react';
+import { Guest } from '../lib/nocodb';
 
 interface InvitationCardProps {
     fecha?: string;
     hora?: string;
     lugar?: string;
     direccion?: string;
+    guest?: Guest;
 }
 
 export default function InvitationCard({ 
     fecha = "Sábado, 15 de Marzo",
     hora = "3:00 PM",
     lugar = "Salón de Eventos",
-    direccion = "Calle Principal 123, Ciudad"
+    direccion = "Calle Principal 123, Ciudad",
+    guest
 }: InvitationCardProps) {
+    // Función para obtener el saludo personalizado
+    const getGreeting = () => {
+        if (!guest) return '';
+        
+        const nombre = guest['Nombre Representante'];
+        const integrantes = guest['N° Integrantes'] || 1;
+        
+        if (integrantes > 2) {
+            return `${nombre} y flia`;
+        } else if (integrantes === 2) {
+            return `${nombre} y acompañante`;
+        } else {
+            return nombre;
+        }
+    };
     const cardRef = useRef<HTMLDivElement>(null);
 
     const handleDownloadPDF = async () => {
@@ -36,6 +54,10 @@ export default function InvitationCard({
             document.body.appendChild(tempContainer);
 
             const cloned = cardRef.current.cloneNode(true) as HTMLElement;
+            
+            // Agregar una clase especial para identificar elementos en PDF
+            cloned.setAttribute('data-pdf-export', 'true');
+            
             tempContainer.appendChild(cloned);
 
             // Función auxiliar para convertir cualquier color a RGB
@@ -106,9 +128,25 @@ export default function InvitationCard({
                 try {
                     const computed = window.getComputedStyle(original);
                     
+                    // Arreglar elementos con bg-clip-text text-transparent
+                    if (element.className && typeof element.className === 'string') {
+                        if (element.className.includes('bg-clip-text') && element.className.includes('text-transparent')) {
+                            // Remover las clases problemáticas
+                            element.className = element.className.replace(/\bbg-clip-text\b/g, '');
+                            element.className = element.className.replace(/\btext-transparent\b/g, '');
+                            // Establecer un color sólido (rosado/púrpura)
+                            element.style.setProperty('color', 'rgb(219, 39, 119)', 'important'); // pink-600
+                            element.style.setProperty('background', 'none', 'important');
+                            element.style.setProperty('background-image', 'none', 'important');
+                            element.style.setProperty('-webkit-background-clip', 'unset', 'important');
+                            element.style.setProperty('background-clip', 'unset', 'important');
+                            element.style.setProperty('-webkit-text-fill-color', 'unset', 'important');
+                        }
+                    }
+                    
                     // Convertir color
                     const color = colorToRGB(computed.color);
-                    if (color) {
+                    if (color && !element.style.color) {
                         element.style.color = color;
                     }
 
@@ -148,6 +186,12 @@ export default function InvitationCard({
                         element.style.background = 'none';
                         element.style.backgroundColor = solidBg;
                     }
+                    
+                    // Remover backdrop-filter que causa problemas en PDFs
+                    if (computed.backdropFilter && computed.backdropFilter !== 'none') {
+                        element.style.backdropFilter = 'none';
+                        element.style.setProperty('-webkit-backdrop-filter', 'none');
+                    }
 
                 } catch {
                     // Ignorar errores
@@ -167,6 +211,31 @@ export default function InvitationCard({
             const forceRGBStyles = (el: HTMLElement) => {
                 try {
                     const computed = window.getComputedStyle(el);
+                    
+                    // Arreglar elementos con bg-clip-text text-transparent primero
+                    if (el.className && typeof el.className === 'string') {
+                        // Ocultar elementos con blur que causan círculos negros
+                        if (el.className.includes('blur-3xl') || el.className.includes('blur-2xl')) {
+                            el.style.setProperty('display', 'none', 'important');
+                            return;
+                        }
+                        
+                        if (el.className.includes('bg-clip-text') && el.className.includes('text-transparent')) {
+                            el.className = el.className.replace(/\bbg-clip-text\b/g, '');
+                            el.className = el.className.replace(/\btext-transparent\b/g, '');
+                            el.style.setProperty('color', 'rgb(219, 39, 119)', 'important');
+                            el.style.setProperty('background', 'none', 'important');
+                            el.style.setProperty('background-image', 'none', 'important');
+                            el.style.setProperty('-webkit-background-clip', 'unset', 'important');
+                            el.style.setProperty('background-clip', 'unset', 'important');
+                            el.style.setProperty('-webkit-text-fill-color', 'unset', 'important');
+                            // Saltar la conversión normal de color para este elemento
+                            Array.from(el.children).forEach(child => {
+                                forceRGBStyles(child as HTMLElement);
+                            });
+                            return;
+                        }
+                    }
                     
                     // Forzar color a RGB
                     const color = colorToRGB(computed.color);
@@ -194,6 +263,12 @@ export default function InvitationCard({
                         }
                     }
                     
+                    // Remover backdrop-filter
+                    if (computed.backdropFilter && computed.backdropFilter !== 'none') {
+                        el.style.setProperty('backdrop-filter', 'none', 'important');
+                        el.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
+                    }
+                    
                     // Procesar hijos recursivamente
                     Array.from(el.children).forEach(child => {
                         forceRGBStyles(child as HTMLElement);
@@ -208,12 +283,25 @@ export default function InvitationCard({
 
             // Remover todas las clases de gradiente y funciones de color modernas del clon antes de capturar
             const removeGradients = (el: HTMLElement) => {
-                // Remover clases de gradiente
+                // Remover clases de gradiente y backdrop-blur
                 if (el.className && typeof el.className === 'string') {
                     el.className = el.className.replace(/\bbg-gradient-[^\s]*/g, '');
                     el.className = el.className.replace(/\bfrom-[^\s]*/g, '');
                     el.className = el.className.replace(/\bvia-[^\s]*/g, '');
                     el.className = el.className.replace(/\bto-[^\s]*/g, '');
+                    el.className = el.className.replace(/\bbackdrop-blur-[^\s]*/g, '');
+                    
+                    // Ocultar elementos con blur-3xl (decoraciones de fondo que causan círculos negros)
+                    if (el.className.includes('blur-3xl') || el.className.includes('blur-2xl')) {
+                        el.style.display = 'none';
+                    }
+                    
+                    // Si tiene backdrop-blur, establecer un fondo sólido
+                    if (el.className.includes('bg-white/')) {
+                        el.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                        el.style.backdropFilter = 'none';
+                        el.style.setProperty('-webkit-backdrop-filter', 'none');
+                    }
                 }
 
                 // Forzar conversión de todos los estilos inline que puedan contener funciones de color
@@ -263,6 +351,28 @@ export default function InvitationCard({
                         const htmlEl = el as HTMLElement;
                         const computed = window.getComputedStyle(htmlEl);
                         
+                        // Arreglar elementos con bg-clip-text text-transparent
+                        if (htmlEl.className && typeof htmlEl.className === 'string') {
+                            // Ocultar elementos con blur que causan círculos negros
+                            if (htmlEl.className.includes('blur-3xl') || htmlEl.className.includes('blur-2xl')) {
+                                htmlEl.style.setProperty('display', 'none', 'important');
+                                htmlEl.style.setProperty('opacity', '0', 'important');
+                                return;
+                            }
+                            
+                            if (htmlEl.className.includes('bg-clip-text') && htmlEl.className.includes('text-transparent')) {
+                                htmlEl.className = htmlEl.className.replace(/\bbg-clip-text\b/g, '');
+                                htmlEl.className = htmlEl.className.replace(/\btext-transparent\b/g, '');
+                                htmlEl.style.setProperty('color', 'rgb(219, 39, 119)', 'important');
+                                htmlEl.style.setProperty('background', 'none', 'important');
+                                htmlEl.style.setProperty('background-image', 'none', 'important');
+                                htmlEl.style.setProperty('-webkit-background-clip', 'unset', 'important');
+                                htmlEl.style.setProperty('background-clip', 'unset', 'important');
+                                htmlEl.style.setProperty('-webkit-text-fill-color', 'unset', 'important');
+                                return; // Saltar el resto del procesamiento para este elemento
+                            }
+                        }
+                        
                         // Convertir todos los colores a RGB con !important
                         const color = colorToRGB(computed.color);
                         if (color) htmlEl.style.setProperty('color', color, 'important');
@@ -287,6 +397,17 @@ export default function InvitationCard({
                                 htmlEl.style.setProperty('background-color', solidBg, 'important');
                             }
                         }
+                        
+                        // Remover backdrop-filter que causa áreas negras
+                        if (computed.backdropFilter && computed.backdropFilter !== 'none') {
+                            htmlEl.style.setProperty('backdrop-filter', 'none', 'important');
+                            htmlEl.style.setProperty('-webkit-backdrop-filter', 'none', 'important');
+                        }
+                        
+                        // Asegurar que los elementos con bg-white/60 tengan un color sólido
+                        if (htmlEl.className && typeof htmlEl.className === 'string' && htmlEl.className.includes('bg-white/')) {
+                            htmlEl.style.setProperty('background-color', 'rgba(255, 255, 255, 0.9)', 'important');
+                        }
                     });
                 }
             });
@@ -301,22 +422,25 @@ export default function InvitationCard({
                 format: [210, 297] // A4
             });
 
-            const imgWidth = 210;
-            const pageHeight = 297;
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            let heightLeft = imgHeight;
-
-            let position = 0;
-
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
+            const pageWidth = 210; // mm
+            const pageHeight = 297; // mm
+            
+            // Calcular dimensiones de la imagen
+            let imgWidth = pageWidth;
+            let imgHeight = (canvas.height * imgWidth) / canvas.width;
+            
+            // Si la imagen es más alta que la página, ajustar para que quepa
+            if (imgHeight > pageHeight) {
+                imgHeight = pageHeight;
+                imgWidth = (canvas.width * imgHeight) / canvas.height;
             }
+            
+            // Centrar la imagen en la página
+            const xOffset = (pageWidth - imgWidth) / 2;
+            const yOffset = (pageHeight - imgHeight) / 2;
+
+            // Agregar la imagen ajustada a una sola página
+            pdf.addImage(imgData, 'PNG', xOffset, yOffset, imgWidth, imgHeight);
 
             pdf.save('invitacion-baby-shower.pdf');
         } catch (error) {
@@ -418,6 +542,23 @@ export default function InvitationCard({
                             </h2>
                             <Sparkles className="w-5 h-5 text-blue-400" />
                         </div>
+                        
+                        {guest && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.3, duration: 0.6 }}
+                                className="mb-6"
+                            >
+                                <p className="text-base text-slate-600 font-medium">
+                                    Querido{guest['N° Integrantes'] > 1 ? 's' : ''}
+                                </p>
+                                <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mt-1 mb-4">
+                                    {getGreeting()}
+                                </h3>
+                            </motion.div>
+                        )}
+                        
                         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-2">
                             Julian & Maria Fernanda
                         </h1>
