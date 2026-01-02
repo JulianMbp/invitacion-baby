@@ -12,13 +12,13 @@ services:
     environment:
       - NODE_ENV=production
     networks:
-      - nginxproxymanager_default
+      - nginx-proxy-manager_default
     volumes:
       # Opcional: si necesitas montar algún volumen
       # - ./data:/app/data
       - /etc/localtime:/etc/localtime:ro
 
 networks:
-  nginxproxymanager_default:
+  nginx-proxy-manager_default:
     external: true
 
