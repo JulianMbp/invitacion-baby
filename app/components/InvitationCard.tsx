@@ -255,7 +255,6 @@ export default function InvitationCard({
                         transition={{ delay: 0.6 }}
                         className="text-center"
                     >
-                        <p className="text-slate-400 text-sm mb-2">Con amor</p>
                         <div className="flex justify-center gap-2">
                              <div className="w-2 h-2 rounded-full bg-pink-300"></div>
                              <div className="w-2 h-2 rounded-full bg-purple-300"></div>
