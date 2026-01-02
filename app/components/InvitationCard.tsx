@@ -1,9 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Baby, Calendar, Clock, Download, Heart, MapPin, Sparkles } from 'lucide-react';
+import { Baby, Calendar, Clock, Download, MapPin, Sparkles } from 'lucide-react';
 import { useRef } from 'react';
+import { EVENT_GOOGLE_MAPS_EMBED, EVENT_GOOGLE_MAPS_LINK } from '../lib/constants';
 import { Guest } from '../lib/nocodb';
+import { Bottle, Pacifier, Rattle, ToyBlock } from './icons/BabyIcons';
 
 interface InvitationCardProps {
     fecha?: string;
@@ -455,79 +457,67 @@ export default function InvitationCard({
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="max-w-2xl mx-auto mb-12"
+            className="max-w-2xl mx-auto mb-12 font-sans"
         >
             {/* Card de Invitación */}
             <div
                 ref={cardRef}
-                className="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 rounded-3xl border-4 border-pink-200 shadow-2xl overflow-hidden relative"
+                className="bg-white rounded-3xl shadow-2xl overflow-hidden relative border-8 border-pink-100"
                 style={{ minHeight: '600px' }}
             >
-                {/* Decoraciones de fondo */}
-                <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    <motion.div
-                        className="absolute top-10 left-10 w-32 h-32 bg-pink-200/30 rounded-full blur-3xl"
-                        animate={{
-                            scale: [1, 1.2, 1],
-                            opacity: [0.3, 0.5, 0.3],
-                        }}
-                        transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                    />
-                    <motion.div
-                        className="absolute bottom-10 right-10 w-40 h-40 bg-blue-200/30 rounded-full blur-3xl"
-                        animate={{
-                            scale: [1, 1.3, 1],
-                            opacity: [0.3, 0.5, 0.3],
-                        }}
-                        transition={{
-                            duration: 5,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: 1
-                        }}
-                    />
-                    <motion.div
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-200/20 rounded-full blur-3xl"
-                        animate={{
-                            scale: [1, 1.2, 1],
-                        }}
-                        transition={{
-                            duration: 6,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: 2
-                        }}
-                    />
+                {/* Decoraciones tipo móvil colgante */}
+                <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none z-20">
+                    <div className="absolute top-0 left-10 w-0.5 h-20 bg-pink-200">
+                        <motion.div 
+                            className="absolute -bottom-6 -left-3"
+                            animate={{ rotate: [5, -5, 5] }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                            <Bottle className="w-8 h-8 text-pink-400 fill-pink-100" />
+                        </motion.div>
+                    </div>
+                    <div className="absolute top-0 right-10 w-0.5 h-24 bg-blue-200">
+                        <motion.div 
+                            className="absolute -bottom-6 -left-3"
+                            animate={{ rotate: [-5, 5, -5] }}
+                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                        >
+                            <Pacifier className="w-8 h-8 text-blue-400 fill-blue-100" />
+                        </motion.div>
+                    </div>
+                    <div className="absolute top-0 left-1/3 w-0.5 h-16 bg-purple-200">
+                        <motion.div 
+                            className="absolute -bottom-6 -left-3"
+                            animate={{ rotate: [3, -3, 3] }}
+                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                        >
+                            <Rattle className="w-8 h-8 text-purple-400 fill-purple-100" />
+                        </motion.div>
+                    </div>
+                    <div className="absolute top-0 right-1/3 w-0.5 h-20 bg-yellow-200">
+                        <motion.div 
+                            className="absolute -bottom-6 -left-3"
+                            animate={{ rotate: [-3, 3, -3] }}
+                            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                        >
+                            <ToyBlock className="w-8 h-8 text-yellow-400 fill-yellow-100" />
+                        </motion.div>
+                    </div>
+                </div>
+
+                {/* Fondo suave con nubes */}
+                <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 via-white to-pink-50/50">
+                    <div className="absolute inset-0 opacity-10" 
+                         style={{ 
+                             backgroundImage: 'radial-gradient(circle, #cbd5e1 1px, transparent 1px)', 
+                             backgroundSize: '20px 20px' 
+                         }}>
+                    </div>
                 </div>
 
                 {/* Contenido */}
-                <div className="relative z-10 p-8 md:p-12">
-                    {/* Header con iconos decorativos */}
-                    <div className="flex justify-center items-center gap-4 mb-6">
-                        <motion.div
-                            animate={{ rotate: [0, 10, -10, 0] }}
-                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        >
-                            <Heart className="w-8 h-8 text-pink-400" />
-                        </motion.div>
-                        <motion.div
-                            animate={{ scale: [1, 1.1, 1] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        >
-                            <Baby className="w-12 h-12 text-purple-500" />
-                        </motion.div>
-                        <motion.div
-                            animate={{ rotate: [0, -10, 10, 0] }}
-                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                        >
-                            <Heart className="w-8 h-8 text-blue-400" />
-                        </motion.div>
-                    </div>
-
+                <div className="relative z-10 p-8 md:p-12 pt-24">
+                    
                     {/* Título */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -535,12 +525,12 @@ export default function InvitationCard({
                         transition={{ delay: 0.2 }}
                         className="text-center mb-8"
                     >
-                        <div className="flex items-center justify-center gap-2 mb-4">
-                            <Sparkles className="w-5 h-5 text-pink-400" />
-                            <h2 className="text-sm uppercase tracking-[0.3em] text-pink-500 font-semibold">
-                                Baby Shower
+                        <div className="flex items-center justify-center gap-3 mb-4">
+                            <Sparkles className="w-5 h-5 text-yellow-400" />
+                            <h2 className="text-sm uppercase tracking-[0.3em] text-slate-400 font-bold">
+                                ¡Estás invitado!
                             </h2>
-                            <Sparkles className="w-5 h-5 text-blue-400" />
+                            <Sparkles className="w-5 h-5 text-yellow-400" />
                         </div>
                         
                         {guest && (
@@ -550,73 +540,97 @@ export default function InvitationCard({
                                 transition={{ delay: 0.3, duration: 0.6 }}
                                 className="mb-6"
                             >
-                                <p className="text-base text-slate-600 font-medium">
-                                    Querido{guest['N° Integrantes'] > 1 ? 's' : ''}
-                                </p>
-                                <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mt-1 mb-4">
-                                    {getGreeting()}
-                                </h3>
+                                <div className="inline-block bg-white/80 px-6 py-2 rounded-full border border-pink-100 shadow-sm mb-4">
+                                    <p className="text-lg text-slate-600 font-medium">
+                                        Para: <span className="text-pink-500 font-bold">{getGreeting()}</span>
+                                    </p>
+                                </div>
                             </motion.div>
                         )}
                         
-                        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-2">
-                            Julian & Maria Fernanda
-                        </h1>
-                        <p className="text-slate-600 text-lg mt-4">
-                            Estamos emocionados de compartir este momento especial contigo
+                        <div className="relative mb-6">
+                            <h1 className="text-5xl md:text-6xl font-bold text-slate-700 leading-tight">
+                                Baby<br/>Shower
+                            </h1>
+                            <div className="absolute -top-6 -right-4 rotate-12">
+                                <Baby className="w-12 h-12 text-pink-300" />
+                            </div>
+                        </div>
+
+                        <p className="text-2xl text-slate-600 font-medium mb-2">
+                            Julian & Mafe
+                        </p>
+                        <p className="text-slate-500">
+                            Te invitamos a celebrar la llegada de nuestro bebé
                         </p>
                     </motion.div>
-
-                    {/* Divider decorativo */}
-                    <div className="flex items-center justify-center gap-4 my-8">
-                        <div className="h-px bg-gradient-to-r from-transparent via-pink-300 to-pink-400 flex-1" />
-                        <Baby className="w-6 h-6 text-pink-400" />
-                        <div className="h-px bg-gradient-to-l from-transparent via-blue-300 to-blue-400 flex-1" />
-                    </div>
 
                     {/* Información del evento */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
-                        className="space-y-6 mb-8"
+                        className="space-y-4 mb-10"
                     >
-                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-pink-200/50 shadow-lg">
-                            <div className="flex items-start gap-4 mb-4">
-                                <div className="p-3 bg-gradient-to-br from-pink-100 to-purple-100 rounded-xl">
-                                    <Calendar className="w-6 h-6 text-pink-500" />
+                        {/* Fecha y Hora */}
+                        <div className="flex flex-col md:flex-row gap-4">
+                            <div className="flex-1 bg-pink-50 rounded-2xl p-4 border border-pink-100 flex items-center gap-4">
+                                <div className="bg-white p-3 rounded-xl shadow-sm">
+                                    <Calendar className="w-6 h-6 text-pink-400" />
                                 </div>
-                                <div className="flex-1">
-                                    <p className="text-sm text-slate-500 mb-1">Fecha</p>
-                                    <p className="text-xl font-bold text-slate-800">{fecha}</p>
+                                <div>
+                                    <p className="text-xs text-pink-400 font-bold uppercase tracking-wider">¿Cuándo?</p>
+                                    <p className="text-slate-700 font-bold">{fecha}</p>
+                                </div>
+                            </div>
+                            <div className="flex-1 bg-blue-50 rounded-2xl p-4 border border-blue-100 flex items-center gap-4">
+                                <div className="bg-white p-3 rounded-xl shadow-sm">
+                                    <Clock className="w-6 h-6 text-blue-400" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-blue-400 font-bold uppercase tracking-wider">¿A qué hora?</p>
+                                    <p className="text-slate-700 font-bold">{hora}</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-purple-200/50 shadow-lg">
-                            <div className="flex items-start gap-4 mb-4">
-                                <div className="p-3 bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl">
-                                    <Clock className="w-6 h-6 text-purple-500" />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-sm text-slate-500 mb-1">Hora</p>
-                                    <p className="text-xl font-bold text-slate-800">{hora}</p>
-                                </div>
+                        {/* Lugar */}
+                        <div className="bg-purple-50 rounded-2xl p-4 border border-purple-100 flex items-center gap-4">
+                            <div className="bg-white p-3 rounded-xl shadow-sm">
+                                <MapPin className="w-6 h-6 text-purple-400" />
+                            </div>
+                            <div>
+                                <p className="text-xs text-purple-400 font-bold uppercase tracking-wider">¿Dónde?</p>
+                                <p className="text-slate-700 font-bold">{lugar}</p>
+                                <a 
+                                    href={EVENT_GOOGLE_MAPS_LINK} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-slate-500 text-sm hover:text-purple-500 transition-colors underline cursor-pointer"
+                                >
+                                    {direccion}
+                                </a>
                             </div>
                         </div>
 
-                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border-2 border-blue-200/50 shadow-lg">
-                            <div className="flex items-start gap-4">
-                                <div className="p-3 bg-gradient-to-br from-blue-100 to-pink-100 rounded-xl">
-                                    <MapPin className="w-6 h-6 text-blue-500" />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-sm text-slate-500 mb-1">Lugar</p>
-                                    <p className="text-xl font-bold text-slate-800 mb-1">{lugar}</p>
-                                    <p className="text-sm text-slate-600">{direccion}</p>
-                                </div>
-                            </div>
-                        </div>
+                        {/* Mapa embebido de Google Maps */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.5 }}
+                            className="rounded-2xl overflow-hidden shadow-lg border border-purple-100"
+                        >
+                            <iframe 
+                                src={EVENT_GOOGLE_MAPS_EMBED}
+                                width="100%" 
+                                height="450" 
+                                style={{ border: 0 }} 
+                                allowFullScreen
+                                loading="lazy" 
+                                referrerPolicy="no-referrer-when-downgrade"
+                                className="w-full"
+                            />
+                        </motion.div>
                     </motion.div>
 
                     {/* Mensaje especial */}
@@ -624,19 +638,15 @@ export default function InvitationCard({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.6 }}
-                        className="text-center mb-6"
+                        className="text-center"
                     >
-                        <p className="text-slate-600 italic">
-                            &quot;Tu presencia es el mejor regalo que podemos recibir&quot;
-                        </p>
+                        <p className="text-slate-400 text-sm mb-2">Con amor</p>
+                        <div className="flex justify-center gap-2">
+                             <div className="w-2 h-2 rounded-full bg-pink-300"></div>
+                             <div className="w-2 h-2 rounded-full bg-purple-300"></div>
+                             <div className="w-2 h-2 rounded-full bg-blue-300"></div>
+                        </div>
                     </motion.div>
-
-                    {/* Decoración inferior */}
-                    <div className="flex justify-center items-center gap-2 mt-6">
-                        <Heart className="w-4 h-4 text-pink-400" />
-                        <Baby className="w-6 h-6 text-purple-500" />
-                        <Heart className="w-4 h-4 text-blue-400" />
-                    </div>
                 </div>
             </div>
 
@@ -645,19 +655,18 @@ export default function InvitationCard({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="flex justify-center mt-6"
+                className="flex justify-center mt-8"
             >
                 <motion.button
                     onClick={handleDownloadPDF}
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-3 bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all"
+                    className="flex items-center gap-3 bg-white text-slate-600 px-8 py-4 rounded-full font-bold text-lg shadow-[0_10px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.1)] border-2 border-slate-100 transition-all"
                 >
-                    <Download className="w-5 h-5" />
-                    <span>Descargar Invitación</span>
+                    <Download className="w-5 h-5 text-slate-400" />
+                    <span>Guardar Recuerdo</span>
                 </motion.button>
             </motion.div>
         </motion.div>
     );
 }
-

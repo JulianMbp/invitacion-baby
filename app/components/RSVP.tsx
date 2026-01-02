@@ -75,26 +75,28 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.5, type: "spring" }}
-                className={`bg-gradient-to-br ${
-                    isConfirmed
-                        ? 'from-green-50 via-emerald-50 to-teal-50 border-green-200'
-                        : 'from-slate-50 via-gray-50 to-slate-50 border-slate-200'
-                } p-8 rounded-3xl border-2 shadow-xl text-center max-w-lg mx-auto relative overflow-hidden`}
+                className={`bg-white p-10 rounded-[2.5rem] border-4 shadow-xl text-center max-w-lg mx-auto relative overflow-hidden ${
+                    isConfirmed ? 'border-green-100' : 'border-slate-100'
+                }`}
             >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full blur-3xl -mr-16 -mt-16" />
+                {/* Background decoration */}
+                <div className={`absolute top-0 right-0 w-40 h-40 rounded-full blur-3xl -mr-20 -mt-20 ${
+                    isConfirmed ? 'bg-green-50' : 'bg-slate-50'
+                }`} />
+                
                 <div className="relative z-10">
                     <motion.div
                         initial={{ scale: 0, rotate: -180 }}
                         animate={{ scale: 1, rotate: 0 }}
                         transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                        className="flex justify-center mb-4"
+                        className="flex justify-center mb-6"
                     >
                         {isConfirmed ? (
-                            <div className="p-4 bg-green-100 rounded-full">
-                                <Check className="w-12 h-12 text-green-600" />
+                            <div className="p-6 bg-green-50 rounded-full border-2 border-green-100">
+                                <Check className="w-12 h-12 text-green-500" />
                             </div>
                         ) : (
-                            <div className="p-4 bg-slate-100 rounded-full">
+                            <div className="p-6 bg-slate-50 rounded-full border-2 border-slate-100">
                                 <Heart className="w-12 h-12 text-slate-400" />
                             </div>
                         )}
@@ -105,20 +107,20 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
                         className={`text-2xl font-bold mb-3 ${
-                            isConfirmed ? 'text-green-700' : 'text-slate-600'
+                            isConfirmed ? 'text-green-600' : 'text-slate-500'
                         }`}
                     >
-                        {isConfirmed ? '¡Genial! Contamos contigo 🎉' : 'Lamentamos que no puedas asistir'}
+                        {isConfirmed ? '¡Qué alegría! 🎉' : '¡Oh no!'}
                     </motion.h3>
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4 }}
-                        className="text-slate-600 mb-6"
+                        className="text-slate-500 mb-8 text-lg"
                     >
                         {isConfirmed
-                            ? 'Gracias por confirmar tu asistencia. ¡Nos vemos pronto!'
-                            : 'Gracias por avisarnos. Te extrañaremos.'}
+                            ? 'Ya te anotamos en la lista. ¡Nos vemos pronto!'
+                            : 'Entendemos, te extrañaremos mucho.'}
                     </motion.p>
                     <motion.button
                         whileHover={{ scale: 1.05 }}
@@ -131,9 +133,9 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                             });
                             setSelectingIntegrantes(false);
                         }}
-                        className="text-sm text-slate-500 hover:text-slate-700 underline font-medium transition-colors"
+                        className="text-sm text-slate-400 hover:text-slate-600 underline font-bold transition-colors"
                     >
-                        Cambiar respuesta
+                        Cambiar mi respuesta
                     </motion.button>
                 </div>
             </motion.div>
@@ -145,20 +147,20 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-gradient-to-br from-white via-pink-50/30 to-blue-50/30 p-8 md:p-10 rounded-3xl border-2 border-pink-200/50 shadow-2xl max-w-2xl mx-auto text-center relative overflow-hidden"
+            className="bg-white/90 backdrop-blur-md p-8 md:p-12 rounded-[3rem] border-4 border-white shadow-[0_20px_50px_rgba(0,0,0,0.05)] max-w-2xl mx-auto text-center relative overflow-hidden"
         >
-            <div className="absolute top-0 left-0 w-40 h-40 bg-pink-200/20 rounded-full blur-3xl -ml-20 -mt-20" />
-            <div className="absolute bottom-0 right-0 w-40 h-40 bg-blue-200/20 rounded-full blur-3xl -mr-20 -mb-20" />
+            <div className="absolute top-0 left-0 w-64 h-64 bg-pink-50 rounded-full blur-3xl -ml-32 -mt-32" />
+            <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -mr-32 -mb-32" />
             
             <div className="relative z-10">
                 <motion.div
                     initial={{ scale: 0, rotate: -180 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ delay: 0.2, type: "spring" }}
-                    className="flex justify-center mb-6"
+                    className="flex justify-center mb-8"
                 >
-                    <div className="p-4 bg-gradient-to-br from-pink-100 to-blue-100 rounded-full shadow-lg">
-                        <Calendar className="w-10 h-10 text-purple-500" />
+                    <div className="p-6 bg-white rounded-full shadow-lg border-2 border-purple-50">
+                        <Calendar className="w-12 h-12 text-purple-400" />
                     </div>
                 </motion.div>
                 
@@ -166,7 +168,7 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-4"
+                    className="text-3xl md:text-4xl font-bold text-slate-700 mb-4"
                 >
                     Confirmar Asistencia
                 </motion.h3>
@@ -174,7 +176,7 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
-                    className="text-slate-600 mb-10 text-lg"
+                    className="text-slate-500 mb-10 text-xl"
                 >
                     ¿Podrás acompañarnos en este día especial?
                 </motion.p>
@@ -192,7 +194,7 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                             disabled={loading}
                             whileHover={{ scale: loading ? 1 : 1.05, y: -2 }}
                             whileTap={{ scale: loading ? 1 : 0.95 }}
-                            className="flex-1 flex items-center justify-center gap-3 bg-gradient-to-r from-green-400 to-emerald-500 text-white py-4 px-8 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
+                            className="flex-1 flex items-center justify-center gap-3 bg-gradient-to-r from-green-400 to-emerald-400 text-white py-5 px-8 rounded-2xl font-bold text-lg shadow-lg shadow-green-200 hover:shadow-xl hover:shadow-green-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
                         >
                             <motion.span
                                 className="relative z-10 flex items-center gap-3"
@@ -210,17 +212,11 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                                     </>
                                 ) : (
                                     <>
-                                        <Check size={22} />
+                                        <Check size={24} strokeWidth={3} />
                                         <span>¡Sí, asistiré!</span>
                                     </>
                                 )}
                             </motion.span>
-                            {!loading && (
-                                <motion.div
-                                    className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                                    initial={false}
-                                />
-                            )}
                         </motion.button>
                         
                         <motion.button
@@ -228,9 +224,9 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                             disabled={loading}
                             whileHover={{ scale: loading ? 1 : 1.05, y: -2 }}
                             whileTap={{ scale: loading ? 1 : 0.95 }}
-                            className="flex-1 flex items-center justify-center gap-3 bg-white border-2 border-slate-300 text-slate-600 py-4 px-8 rounded-2xl font-semibold text-lg shadow-md hover:shadow-lg hover:bg-slate-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex-1 flex items-center justify-center gap-3 bg-white border-2 border-slate-200 text-slate-500 py-5 px-8 rounded-2xl font-bold text-lg shadow-sm hover:shadow-md hover:border-slate-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <X size={22} />
+                            <X size={24} strokeWidth={3} />
                             <span>No podré</span>
                         </motion.button>
                     </div>
@@ -239,15 +235,15 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="space-y-6"
+                        className="space-y-8"
                     >
                         <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.2 }}
-                            className="text-slate-700 text-lg font-medium mb-6"
+                            className="text-slate-600 text-xl font-medium mb-6"
                         >
-                            ¿Cuántos integrantes de tu familia asistirán?
+                            ¿Cuántas personas asistirán?
                         </motion.p>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                             {Array.from({ length: numIntegrantes }, (_, i) => i + 1).map((num) => (
@@ -255,9 +251,9 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                                     key={num}
                                     onClick={() => handleSelectIntegrantes(num)}
                                     disabled={loading}
-                                    whileHover={{ scale: loading ? 1 : 1.05, y: -2 }}
+                                    whileHover={{ scale: loading ? 1 : 1.05, y: -4 }}
                                     whileTap={{ scale: loading ? 1 : 0.95 }}
-                                    className="bg-gradient-to-br from-pink-400 via-purple-400 to-blue-400 text-white py-4 px-6 rounded-2xl font-bold text-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
+                                    className="bg-white border-2 border-pink-100 text-pink-500 hover:bg-pink-50 hover:border-pink-300 py-6 px-6 rounded-3xl font-black text-2xl shadow-sm hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
                                 >
                                     <motion.span
                                         className="relative z-10"
@@ -266,21 +262,15 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                                     >
                                         {num}
                                     </motion.span>
-                                    {!loading && (
-                                        <motion.div
-                                            className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                                            initial={false}
-                                        />
-                                    )}
                                 </motion.button>
                             ))}
                         </div>
                         <motion.button
                             onClick={() => setSelectingIntegrantes(false)}
                             disabled={loading}
-                            className="w-full text-slate-500 hover:text-slate-700 text-sm font-medium transition-colors disabled:opacity-50"
+                            className="w-full text-slate-400 hover:text-slate-600 text-sm font-bold transition-colors disabled:opacity-50 uppercase tracking-wide"
                         >
-                            ← Volver
+                            ← Volver atrás
                         </motion.button>
                     </motion.div>
                 )}

@@ -3,7 +3,6 @@
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-    Baby,
     Bed,
     BookOpen,
     Box,
@@ -25,6 +24,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Gift, Guest, getGifts, reserveGift, unreserveGift } from '../lib/nocodb';
+import { Baby, Rattle } from './icons/BabyIcons';
 
 interface GiftRegistryProps {
     guest: Guest;
@@ -130,7 +130,7 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
         
         // Estimulación
         if (categoryLower.includes('estimulación') || categoryLower.includes('estimulacion') || categoryLower.includes('juguete') || categoryLower.includes('juego') || categoryLower.includes('sonajero') || categoryLower.includes('mordedor')) {
-            return Sparkles;
+            return Rattle;
         }
         
         // Organización
@@ -202,7 +202,7 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                 >
                     <GiftIcon className="w-12 h-12 text-pink-400" />
                 </motion.div>
-                <p className="text-slate-400 text-lg">Cargando lista de regalos...</p>
+                <p className="text-slate-400 text-lg font-medium">Cargando lista de regalos...</p>
             </div>
         );
     }
@@ -212,7 +212,7 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center mb-12"
+                className="text-center mb-16"
             >
                 <motion.div
                     initial={{ scale: 0, rotate: -180 }}
@@ -220,15 +220,15 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                     transition={{ delay: 0.2, type: "spring" }}
                     className="flex justify-center mb-6"
                 >
-                    <div className="p-4 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full shadow-lg">
-                        <GiftIcon className="w-12 h-12 text-purple-500" />
+                    <div className="p-5 bg-white rounded-full shadow-lg border-2 border-pink-100">
+                        <GiftIcon className="w-12 h-12 text-pink-400" />
                     </div>
                 </motion.div>
                 <motion.h2
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-4"
+                    className="text-4xl md:text-5xl font-bold text-slate-700 mb-4"
                 >
                     Lista de Regalos
                 </motion.h2>
@@ -236,9 +236,9 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
-                    className="text-slate-600 text-lg max-w-2xl mx-auto mb-8"
+                    className="text-slate-500 text-xl max-w-2xl mx-auto mb-8 font-medium"
                 >
-                    Primero selecciona una categoría para ver los regalos disponibles.
+                    Elige una categoría para descubrir los regalos
                 </motion.p>
             </motion.div>
 
@@ -247,16 +247,8 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="mb-12"
+                className="mb-16"
             >
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="text-center text-slate-700 font-semibold text-lg mb-6"
-                >
-                    Selecciona una categoría
-                </motion.p>
                 <div className="flex flex-wrap justify-center gap-4 px-4">
                     {categories.map((category, index) => {
                         const IconComponent = getCategoryIcon(category);
@@ -271,19 +263,19 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => setSelectedCategory(category)}
                                 className={clsx(
-                                    "flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all shadow-lg min-w-[100px]",
+                                    "flex flex-col items-center justify-center gap-3 p-5 rounded-3xl border-2 transition-all shadow-sm min-w-[110px] aspect-square",
                                     isSelected
-                                        ? "bg-gradient-to-br from-pink-400 via-purple-400 to-blue-400 border-pink-500 text-white shadow-xl scale-105"
-                                        : "bg-white border-pink-200 text-slate-700 hover:border-pink-300 hover:shadow-xl"
+                                        ? "bg-white border-pink-400 text-pink-500 shadow-pink-100 shadow-lg scale-105"
+                                        : "bg-white border-slate-100 text-slate-400 hover:border-pink-200 hover:text-pink-400 hover:shadow-md"
                                 )}
                             >
                                 <IconComponent className={clsx(
                                     "w-8 h-8",
-                                    isSelected ? "text-white" : "text-pink-500"
+                                    isSelected ? "text-pink-500 fill-pink-50" : "text-current"
                                 )} />
                                 <span className={clsx(
-                                    "text-xs font-semibold text-center leading-tight",
-                                    isSelected ? "text-white" : "text-slate-700"
+                                    "text-xs font-bold text-center leading-tight uppercase tracking-wide",
+                                    isSelected ? "text-pink-500" : "text-current"
                                 )}>
                                     {category}
                                 </span>
@@ -298,7 +290,7 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center py-20"
+                    className="text-center py-20 bg-white/50 rounded-[3rem] border-4 border-white/50"
                 >
                     <motion.div
                         animate={{ 
@@ -310,15 +302,12 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                             repeat: Infinity,
                             ease: "easeInOut"
                         }}
-                        className="inline-block mb-6"
+                        className="inline-block mb-6 opacity-30"
                     >
-                        <GiftIcon className="w-16 h-16 text-pink-400" />
+                        <GiftIcon className="w-20 h-20 text-pink-300" />
                     </motion.div>
-                    <p className="text-slate-500 text-xl font-medium mb-2">
-                        Selecciona una categoría arriba
-                    </p>
-                    <p className="text-slate-400 text-sm">
-                        Para ver los regalos disponibles en esa categoría
+                    <p className="text-slate-400 text-xl font-bold mb-2">
+                        👆 Selecciona una categoría arriba
                     </p>
                 </motion.div>
             )}
@@ -331,8 +320,8 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                     transition={{ duration: 0.5 }}
                     className="mb-8"
                 >
-                    <h3 className="text-2xl font-bold text-slate-700 mb-6 text-center">
-                        Regalos en: <span className="text-pink-500">{selectedCategory}</span>
+                    <h3 className="text-2xl font-bold text-slate-400 mb-8 text-center uppercase tracking-widest text-sm">
+                        Regalos disponibles en: <span className="text-pink-500 font-black">{selectedCategory}</span>
                     </h3>
                 </motion.div>
             )}
@@ -344,9 +333,9 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="col-span-full text-center py-12"
+                                className="col-span-full text-center py-20"
                             >
-                                <p className="text-slate-400 text-lg">
+                                <p className="text-slate-400 text-lg font-medium">
                                     No hay regalos disponibles en esta categoría
                                 </p>
                             </motion.div>
@@ -363,113 +352,101 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 transition={{ delay: index * 0.05, duration: 0.4 }}
-                                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                                whileHover={{ y: -8, transition: { duration: 0.2 } }}
                                 className={clsx(
-                                    "group relative bg-white p-6 rounded-3xl border-2 transition-all overflow-hidden",
+                                    "group relative bg-white p-6 rounded-[2rem] border-2 transition-all overflow-hidden",
                                     isReserved
-                                        ? "border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100/50 opacity-75"
-                                        : "border-pink-200/50 hover:border-pink-300 hover:shadow-2xl bg-gradient-to-br from-white to-pink-50/30"
+                                        ? "border-slate-100 bg-slate-50/50 opacity-60"
+                                        : "border-white shadow-[0_10px_30px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_rgba(236,72,153,0.1)] hover:border-pink-200"
                                 )}
                             >
-                                {/* Decorative background */}
-                                <div className="absolute top-0 right-0 w-24 h-24 bg-pink-100/20 rounded-full blur-2xl -mr-12 -mt-12" />
-                                
-                                <div className="relative z-10">
+                                <div className="relative z-10 h-full flex flex-col">
                                     <div className="flex items-start justify-between mb-4">
-                                        <motion.div
-                                            whileHover={{ rotate: 15, scale: 1.1 }}
-                                            className={clsx(
+                                        <div className={clsx(
                                                 "p-3 rounded-2xl",
                                                 isReserved
-                                                    ? "bg-slate-200"
-                                                    : "bg-gradient-to-br from-pink-100 to-purple-100"
+                                                    ? "bg-slate-100"
+                                                    : "bg-pink-50"
                                             )}
                                         >
                                             <GiftIcon className={clsx(
                                                 "w-6 h-6",
                                                 isReserved ? "text-slate-400" : "text-pink-500"
                                             )} />
-                                        </motion.div>
+                                        </div>
                                         {isReserved && (
-                                            <motion.span
-                                                initial={{ scale: 0 }}
-                                                animate={{ scale: 1 }}
-                                                className={clsx(
-                                                    "text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-1.5 shadow-md",
+                                            <span className={clsx(
+                                                    "text-xs px-3 py-1.5 rounded-full font-bold flex items-center gap-1.5",
                                                     isReservedByMe
-                                                        ? "bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 border border-green-200"
-                                                        : "bg-slate-200 text-slate-500"
+                                                        ? "bg-green-100 text-green-600"
+                                                        : "bg-slate-100 text-slate-400"
                                                 )}
                                             >
                                                 {isReservedByMe ? (
                                                     <>
-                                                        <Check className="w-3 h-3" />
-                                                        Apartado por ti
+                                                        <Check className="w-3 h-3 stroke-[3]" />
+                                                        TUYO
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <Lock className="w-3 h-3" />
-                                                        Apartado
+                                                        <Lock className="w-3 h-3 stroke-[3]" />
+                                                        OCUPADO
                                                     </>
                                                 )}
-                                            </motion.span>
+                                            </span>
                                         )}
                                     </div>
 
                                     {gift.Category && (
-                                        <motion.p
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ delay: 0.1 }}
-                                            className="text-xs text-pink-400 mb-2 uppercase tracking-wider font-semibold"
-                                        >
+                                        <p className="text-[10px] text-pink-400 mb-2 uppercase tracking-widest font-bold">
                                             {gift.Category}
-                                        </motion.p>
+                                        </p>
                                     )}
                                     
                                     <h3 className={clsx(
-                                        "font-bold text-lg mb-2",
-                                        isReserved ? "text-slate-500" : "text-slate-800"
+                                        "font-bold text-lg mb-3 leading-tight",
+                                        isReserved ? "text-slate-400" : "text-slate-700"
                                     )}>
                                         {gift.Item}
                                     </h3>
                                     
                                     {gift.Description && (
-                                        <p className="text-sm text-slate-600 mb-4 line-clamp-2 leading-relaxed">
+                                        <p className="text-sm text-slate-500 mb-6 line-clamp-3 leading-relaxed flex-grow">
                                             {gift.Description}
                                         </p>
                                     )}
                                     
                                     {gift.PriceRange && (
-                                        <div className="flex items-center gap-2 mb-4">
-                                            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                                            <p className="text-xs text-slate-500 font-medium">
+                                        <div className="flex items-center gap-2 mb-6 bg-slate-50 self-start px-3 py-1.5 rounded-lg">
+                                            <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                                            <p className="text-xs text-slate-500 font-bold">
                                                 {gift.PriceRange}
                                             </p>
                                         </div>
                                     )}
 
+                                    <div className="mt-auto">
                                     {isReservedByMe ? (
                                         <motion.button
                                             onClick={() => handleUnreserve(gift)}
                                             disabled={unreservingId === gift.Id}
                                             whileHover={unreservingId !== gift.Id ? { scale: 1.02 } : {}}
                                             whileTap={unreservingId !== gift.Id ? { scale: 0.98 } : {}}
-                                            className="w-full py-3 rounded-2xl font-semibold text-sm transition-all relative overflow-hidden bg-gradient-to-r from-red-400 to-orange-500 text-white shadow-lg hover:shadow-xl border-2 border-transparent"
+                                            className="w-full py-4 rounded-xl font-bold text-sm transition-all relative overflow-hidden bg-red-50 text-red-500 hover:bg-red-100"
                                         >
                                             {unreservingId === gift.Id ? (
                                                 <span className="flex items-center justify-center gap-2">
                                                     <motion.div
-                                                        className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                                                        className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full"
                                                         animate={{ rotate: 360 }}
                                                         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                                                     />
-                                                    Desagregando...
+                                                    Liberando...
                                                 </span>
                                             ) : (
                                                 <span className="flex items-center justify-center gap-2">
-                                                    <X className="w-4 h-4" />
-                                                    Desagregar
+                                                    <X className="w-4 h-4 stroke-[3]" />
+                                                    Liberar Regalo
                                                 </span>
                                             )}
                                         </motion.button>
@@ -480,10 +457,10 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                                             whileHover={!isReserved && reservingId !== gift.Id ? { scale: 1.02 } : {}}
                                             whileTap={!isReserved && reservingId !== gift.Id ? { scale: 0.98 } : {}}
                                             className={clsx(
-                                                "w-full py-3 rounded-2xl font-semibold text-sm transition-all relative overflow-hidden",
+                                                "w-full py-4 rounded-xl font-bold text-sm transition-all relative overflow-hidden",
                                                 isReserved
-                                                    ? "bg-transparent text-slate-400 cursor-default border border-slate-200"
-                                                    : "bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-white shadow-lg hover:shadow-xl border-2 border-transparent"
+                                                    ? "bg-transparent text-slate-300 cursor-default"
+                                                    : "bg-slate-800 text-white hover:bg-pink-500 hover:shadow-lg hover:shadow-pink-200"
                                             )}
                                         >
                                             {reservingId === gift.Id ? (
@@ -503,11 +480,12 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                                             ) : (
                                                 <span className="flex items-center justify-center gap-2">
                                                     <Sparkles className="w-4 h-4" />
-                                                    Apartar Regalo
+                                                    ¡Lo quiero regalar!
                                                 </span>
                                             )}
                                         </motion.button>
                                     )}
+                                    </div>
                                 </div>
                             </motion.div>
                                 );
