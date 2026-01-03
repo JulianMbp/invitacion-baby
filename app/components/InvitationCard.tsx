@@ -41,11 +41,9 @@ export default function InvitationCard({
 
     const handleDownloadPDF = async () => {
         try {
-            // ID del archivo de Google Drive
-            const fileId = '19lmNDulhPeR7eKifkDpVHRo2iTckx9vT';
             
             // Enlace para descargar el PDF directamente
-            const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+            const downloadUrl = `https://drive.google.com/file/d/1apEolAKYX37kPf99Liou_42R_ygkZpAo/view?usp=sharing`;
             
             // Descargar el PDF
             const link = document.createElement('a');
