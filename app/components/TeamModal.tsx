@@ -42,16 +42,16 @@ export default function TeamModal({ show, team, onClose }: TeamModalProps) {
             particleColor: 'bg-pink-300',
             legend: (
                 <>
-                    <p className="text-xl font-bold text-pink-700 mb-4">
+                    <p className="text-base md:text-xl font-bold text-pink-700 mb-3 md:mb-4">
                         👸 Una Princesa con su Corona 👑
                     </p>
-                    <p className="text-slate-600 leading-relaxed text-lg">
+                    <p className="text-slate-600 leading-relaxed text-sm md:text-lg">
                         ¡Qué elección tan dulce! Has elegido el <span className="font-bold text-pink-600">Team Rosa</span>, 
                         donde las princesas brillan con su corona y el amor se llena de ternura. 
                         Tu intuición te lleva hacia la magia de una pequeña que llegará a conquistar el mundo 
                         con su sonrisa y su dulzura. 
                     </p>
-                    <p className="text-slate-600 leading-relaxed text-lg mt-4">
+                    <p className="text-slate-600 leading-relaxed text-sm md:text-lg mt-3 md:mt-4">
                         🌸 ¡Prepárate para celebrar la llegada de nuestra pequeña reina! 👑
                     </p>
                 </>
@@ -71,16 +71,16 @@ export default function TeamModal({ show, team, onClose }: TeamModalProps) {
             particleColor: 'bg-blue-300',
             legend: (
                 <>
-                    <p className="text-xl font-bold text-blue-700 mb-4">
+                    <p className="text-base md:text-xl font-bold text-blue-700 mb-3 md:mb-4">
                         🤴 Un Príncipe con su Corona 👑
                     </p>
-                    <p className="text-slate-600 leading-relaxed text-lg">
+                    <p className="text-slate-600 leading-relaxed text-sm md:text-lg">
                         ¡Excelente elección! Has elegido el <span className="font-bold text-blue-600">Team Azul</span>, 
                         donde los príncipes valientes brillan con su corona y la aventura espera. 
                         Tu intuición te lleva hacia la energía de un pequeño que llegará a conquistar el mundo 
                         con su valentía y su sonrisa. 
                     </p>
-                    <p className="text-slate-600 leading-relaxed text-lg mt-4">
+                    <p className="text-slate-600 leading-relaxed text-sm md:text-lg mt-3 md:mt-4">
                         💙 ¡Prepárate para celebrar la llegada de nuestro pequeño rey! 👑
                     </p>
                 </>
@@ -110,10 +110,10 @@ export default function TeamModal({ show, team, onClose }: TeamModalProps) {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.8, y: 50 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+                        className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-4 overflow-y-auto"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className={`relative bg-gradient-to-br ${data.bgGradient} rounded-3xl shadow-2xl ${data.shadowColor} border-4 ${data.borderColor} max-w-lg w-full p-8 overflow-hidden`}>
+                        <div className={`relative bg-gradient-to-br ${data.bgGradient} rounded-2xl md:rounded-3xl shadow-2xl ${data.shadowColor} border-2 md:border-4 ${data.borderColor} max-w-lg w-full p-4 md:p-8 my-auto overflow-hidden`}>
                             {/* Decoraciones de fondo */}
                             <div className={`absolute -top-20 -right-20 w-64 h-64 ${data.bgBlob1} rounded-full blur-3xl`} />
                             <div className={`absolute -bottom-20 -left-20 w-64 h-64 ${data.bgBlob2} rounded-full blur-3xl`} />
@@ -123,9 +123,9 @@ export default function TeamModal({ show, team, onClose }: TeamModalProps) {
                                 onClick={onClose}
                                 whileHover={{ scale: 1.1, rotate: 90 }}
                                 whileTap={{ scale: 0.9 }}
-                                className={`absolute top-4 right-4 ${data.textColor} hover:opacity-80 transition-colors z-10`}
+                                className={`absolute top-2 right-2 md:top-4 md:right-4 ${data.textColor} hover:opacity-80 transition-colors z-10`}
                             >
-                                <X className="w-6 h-6" />
+                                <X className="w-5 h-5 md:w-6 md:h-6" />
                             </motion.button>
 
                             <div className="relative z-10">
@@ -134,9 +134,9 @@ export default function TeamModal({ show, team, onClose }: TeamModalProps) {
                                     initial={{ scale: 0, rotate: -180 }}
                                     animate={{ scale: 1, rotate: 0 }}
                                     transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                                    className="flex justify-center mb-6"
+                                    className="flex justify-center mb-3 md:mb-6"
                                 >
-                                    <div className={`bg-gradient-to-br ${data.gradient} p-6 rounded-full shadow-lg`}>
+                                    <div className={`bg-gradient-to-br ${data.gradient} p-3 md:p-6 rounded-full shadow-lg`}>
                                         <motion.div
                                             animate={{
                                                 rotate: [0, 10, -10, 0],
@@ -148,7 +148,7 @@ export default function TeamModal({ show, team, onClose }: TeamModalProps) {
                                                 ease: 'easeInOut',
                                             }}
                                         >
-                                            <IconComponent className="w-16 h-16 text-white" />
+                                            <IconComponent className="w-10 h-10 md:w-16 md:h-16 text-white" />
                                         </motion.div>
                                     </div>
                                 </motion.div>
@@ -158,9 +158,9 @@ export default function TeamModal({ show, team, onClose }: TeamModalProps) {
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
                                     transition={{ delay: 0.3, type: 'spring' }}
-                                    className="text-center mb-4"
+                                    className="text-center mb-2 md:mb-4"
                                 >
-                                    <span className="text-6xl">{data.emoji}</span>
+                                    <span className="text-4xl md:text-6xl">{data.emoji}</span>
                                 </motion.div>
 
                                 {/* Título */}
@@ -168,7 +168,7 @@ export default function TeamModal({ show, team, onClose }: TeamModalProps) {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.4 }}
-                                    className={`text-3xl font-bold ${data.textColor} text-center mb-6`}
+                                    className={`text-xl md:text-3xl font-bold ${data.textColor} text-center mb-3 md:mb-6`}
                                 >
                                     {data.title}
                                 </motion.h2>
@@ -178,7 +178,7 @@ export default function TeamModal({ show, team, onClose }: TeamModalProps) {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.5 }}
-                                    className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/50 shadow-lg"
+                                    className="bg-white/80 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border-2 border-white/50 shadow-lg"
                                 >
                                     {data.legend}
                                 </motion.div>
@@ -191,7 +191,7 @@ export default function TeamModal({ show, team, onClose }: TeamModalProps) {
                                     transition={{ delay: 0.6 }}
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className={`w-full mt-6 bg-gradient-to-r ${data.gradient} text-white font-bold py-4 px-6 rounded-full shadow-lg hover:shadow-xl transition-all text-lg`}
+                                    className={`w-full mt-4 md:mt-6 bg-gradient-to-r ${data.gradient} text-white font-bold py-3 md:py-4 px-6 rounded-full shadow-lg hover:shadow-xl transition-all text-base md:text-lg`}
                                 >
                                     ¡Perfecto! 👏
                                 </motion.button>

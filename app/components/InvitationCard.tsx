@@ -1,8 +1,8 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
-import { Baby, Calendar, Clock, Download, MapPin, Sparkles, X } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Baby, Calendar, Clock, Download, MapPin, Sparkles } from 'lucide-react';
+import { useRef } from 'react';
 import { EVENT_GOOGLE_MAPS_EMBED, EVENT_GOOGLE_MAPS_LINK } from '../lib/constants';
 import { Guest } from '../lib/nocodb';
 import { Bottle, Pacifier, Rattle, ToyBlock } from './icons/BabyIcons';
@@ -38,7 +38,6 @@ export default function InvitationCard({
         }
     };
     const cardRef = useRef<HTMLDivElement>(null);
-    const [showCalendarModal, setShowCalendarModal] = useState(false);
 
     const handleDownloadPDF = async () => {
         try {
@@ -60,10 +59,6 @@ export default function InvitationCard({
             const errorMessage = error instanceof Error ? error.message : String(error);
             alert(`Hubo un error al descargar el PDF: ${errorMessage}`);
         }
-    };
-
-    const handleSaveMemory = () => {
-        setShowCalendarModal(true);
     };
 
     const generateGoogleCalendarUrl = () => {
@@ -90,16 +85,6 @@ export default function InvitationCard({
     const handleAddToCalendar = () => {
         const calendarUrl = generateGoogleCalendarUrl();
         window.open(calendarUrl, '_blank');
-        setShowCalendarModal(false);
-        // Esperar un momento antes de descargar el PDF para que el usuario pueda ver que se abrió Google Calendar
-        setTimeout(() => {
-            handleDownloadPDF();
-        }, 500);
-    };
-
-    const handleCancelCalendar = () => {
-        setShowCalendarModal(false);
-        handleDownloadPDF();
     };
 
     return (
@@ -299,167 +284,35 @@ export default function InvitationCard({
                 </div>
             </div>
 
-            {/* Botón de descarga */}
+            {/* Botones de acción */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="flex justify-center mt-8"
+                className="flex flex-col sm:flex-row gap-4 justify-center mt-8 px-4"
             >
+                {/* Botón Guardar Recuerdo */}
                 <motion.button
-                    onClick={handleSaveMemory}
+                    onClick={handleDownloadPDF}
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-3 bg-white text-slate-600 px-8 py-4 rounded-full font-bold text-lg shadow-[0_10px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.1)] border-2 border-slate-100 transition-all"
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-3 bg-white text-slate-600 px-8 py-4 rounded-full font-bold text-lg shadow-[0_10px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.1)] border-2 border-slate-100 transition-all"
                 >
                     <Download className="w-5 h-5 text-slate-400" />
                     <span>Guardar Recuerdo</span>
                 </motion.button>
+
+                {/* Botón Agregar a Calendar */}
+                <motion.button
+                    onClick={handleAddToCalendar}
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-3 bg-gradient-to-r from-pink-400 to-blue-400 text-white px-8 py-4 rounded-full font-bold text-lg shadow-[0_10px_20px_rgba(236,72,153,0.3)] hover:shadow-[0_15px_30px_rgba(236,72,153,0.4)] transition-all"
+                >
+                    <Calendar className="w-5 h-5" />
+                    <span>Agregar a Calendar</span>
+                </motion.button>
             </motion.div>
-
-            {/* Modal para Google Calendar */}
-            <AnimatePresence>
-                {showCalendarModal && (
-                    <>
-                        {/* Overlay con blur */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={handleCancelCalendar}
-                            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50"
-                        />
-                        
-                        {/* Modal */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.8, y: 50 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.8, y: 50 }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <div className="relative bg-gradient-to-br from-pink-50 to-blue-50 rounded-3xl shadow-2xl shadow-pink-200/50 border-4 border-pink-200 max-w-lg w-full p-8 overflow-hidden">
-                                {/* Decoraciones de fondo */}
-                                <div className="absolute -top-20 -right-20 w-64 h-64 bg-pink-200/30 rounded-full blur-3xl" />
-                                <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-200/30 rounded-full blur-3xl" />
-                                
-                                {/* Botón de cerrar */}
-                                <motion.button
-                                    onClick={handleCancelCalendar}
-                                    whileHover={{ scale: 1.1, rotate: 90 }}
-                                    whileTap={{ scale: 0.9 }}
-                                    className="absolute top-4 right-4 text-slate-600 hover:opacity-80 transition-colors z-10"
-                                >
-                                    <X className="w-6 h-6" />
-                                </motion.button>
-
-                                <div className="relative z-10">
-                                    {/* Icono animado */}
-                                    <motion.div
-                                        initial={{ scale: 0, rotate: -180 }}
-                                        animate={{ scale: 1, rotate: 0 }}
-                                        transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                                        className="flex justify-center mb-6"
-                                    >
-                                        <div className="bg-gradient-to-br from-pink-400 to-blue-400 p-6 rounded-full shadow-lg">
-                                            <motion.div
-                                                animate={{
-                                                    rotate: [0, 10, -10, 0],
-                                                    scale: [1, 1.1, 1],
-                                                }}
-                                                transition={{
-                                                    duration: 3,
-                                                    repeat: Infinity,
-                                                    ease: 'easeInOut',
-                                                }}
-                                            >
-                                                <Calendar className="w-16 h-16 text-white" />
-                                            </motion.div>
-                                        </div>
-                                    </motion.div>
-
-                                    {/* Título */}
-                                    <motion.h2
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 0.4 }}
-                                        className="text-3xl font-bold text-slate-700 text-center mb-4"
-                                    >
-                                        ¿Agregar a Google Calendar?
-                                    </motion.h2>
-
-                                    {/* Pregunta */}
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 0.5 }}
-                                        className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/50 shadow-lg mb-6"
-                                    >
-                                        <p className="text-slate-600 leading-relaxed text-lg text-center">
-                                            ¿Quieres agregar este evento a tu Google Calendar antes de descargar la invitación en PDF?
-                                        </p>
-                                    </motion.div>
-
-                                    {/* Botones */}
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 0.6 }}
-                                        className="flex flex-col gap-3"
-                                    >
-                                        <motion.button
-                                            onClick={handleAddToCalendar}
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
-                                            className="w-full bg-gradient-to-r from-pink-400 to-blue-400 text-white font-bold py-4 px-6 rounded-full shadow-lg hover:shadow-xl transition-all text-lg"
-                                        >
-                                            Sí, agregar a Google Calendar
-                                        </motion.button>
-                                        <motion.button
-                                            onClick={handleCancelCalendar}
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
-                                            className="w-full bg-white text-slate-600 font-bold py-4 px-6 rounded-full shadow-lg hover:shadow-xl transition-all text-lg border-2 border-slate-200"
-                                        >
-                                            No, solo descargar PDF
-                                        </motion.button>
-                                    </motion.div>
-                                </div>
-
-                                {/* Partículas decorativas */}
-                                <motion.div
-                                    className="absolute inset-0 pointer-events-none overflow-hidden"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ delay: 0.7 }}
-                                >
-                                    {[...Array(6)].map((_, i) => (
-                                        <motion.div
-                                            key={i}
-                                            className={`absolute w-2 h-2 ${i % 2 === 0 ? 'bg-pink-300' : 'bg-blue-300'} rounded-full`}
-                                            style={{
-                                                left: `${20 + i * 15}%`,
-                                                top: `${10 + (i % 2) * 80}%`,
-                                            }}
-                                            animate={{
-                                                y: [0, -20, 0],
-                                                opacity: [0.3, 0.8, 0.3],
-                                                scale: [1, 1.5, 1],
-                                            }}
-                                            transition={{
-                                                duration: 2 + i * 0.5,
-                                                repeat: Infinity,
-                                                delay: i * 0.2,
-                                            }}
-                                        />
-                                    ))}
-                                </motion.div>
-                            </div>
-                        </motion.div>
-                    </>
-                )}
-            </AnimatePresence>
         </motion.div>
     );
 }
