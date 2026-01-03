@@ -1,4 +1,4 @@
-import { ConfirmationStatus, NOCODB_API_TOKEN, NOCODB_API_URL, TABLES } from './constants';
+import { ConfirmationStatus, NOCODB_API_TOKEN, NOCODB_API_URL, TABLES, TeamStatus } from './constants';
 
 export interface Guest {
     Id: number;
@@ -10,6 +10,7 @@ export interface Guest {
     Confirmado?: boolean; // Old field - deprecated
     confirmacion?: number; // Enum: 1=Pending, 2=Confirmed, 3=Declined
     'N° de Integrantes confirmados'?: number; // Number of confirmed attendees
+    team?: number; // Enum: 0=None, 1=Pink, 2=Blue
     invited?: boolean; // internal flag
 }
 
@@ -78,6 +79,30 @@ export async function confirmGuestAttendance(id: number, status: ConfirmationSta
         // If declined, reset integrantes confirmados
         updateData['N° de Integrantes confirmados'] = null;
     }
+    
+    // NocoDB PATCH endpoint: /api/v2/tables/{tableId}/records (no ID in URL)
+    // Must include all fields in the body, updating only the ones we want to change
+    return await fetchAPI(`/api/v2/tables/${TABLES.GUESTS}/records`, {
+        method: 'PATCH',
+        body: JSON.stringify(updateData),
+    });
+}
+
+export async function updateGuestTeam(id: number, team: TeamStatus): Promise<any> {
+    // Get the full record first to include all fields in the update
+    const currentRecord = await getGuestById(id);
+    if (!currentRecord) {
+        throw new Error('Record not found');
+    }
+    
+    // Filter out auto-generated fields and internal fields that shouldn't be sent
+    const { CreatedAt, UpdatedAt, invited, ...recordToUpdate } = currentRecord as any;
+    
+    // Prepare update object
+    const updateData: any = {
+        ...recordToUpdate,
+        team: team, // Set the team enum value
+    };
     
     // NocoDB PATCH endpoint: /api/v2/tables/{tableId}/records (no ID in URL)
     // Must include all fields in the body, updating only the ones we want to change

@@ -135,7 +135,7 @@ export default function Home() {
           </motion.div>
 
           {/* Invitación inicial con nombres (siempre visible) */}
-          <Invitation guest={user} />
+          <Invitation guest={user} onUpdate={setUser} />
           
           {/* Card de Invitación */}
           <div className="px-4 mb-16">

@@ -2,14 +2,21 @@
 
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
-import { Guest } from '../lib/nocodb';
+import { useState } from 'react';
+import { TeamStatus } from '../lib/constants';
+import { Guest, updateGuestTeam } from '../lib/nocodb';
+import TeamModal from './TeamModal';
 import { Baby as BabyIcon, Bottle, Pacifier } from './icons/BabyIcons';
 
 interface InvitationProps {
     guest?: Guest;
+    onUpdate?: (updatedGuest: Guest) => void;
 }
 
-export default function Invitation({ guest }: InvitationProps) {
+export default function Invitation({ guest, onUpdate }: InvitationProps) {
+    const [showModal, setShowModal] = useState(false);
+    const [selectedTeam, setSelectedTeam] = useState<TeamStatus.PINK | TeamStatus.BLUE | null>(null);
+    const [loading, setLoading] = useState(false);
     // Función para obtener el saludo personalizado
     const getGreeting = () => {
         if (!guest) return '';
@@ -24,6 +31,35 @@ export default function Invitation({ guest }: InvitationProps) {
         } else {
             return nombre;
         }
+    };
+
+    const handleTeamSelect = async (team: TeamStatus.PINK | TeamStatus.BLUE) => {
+        if (!guest || loading) return;
+        
+        setLoading(true);
+        try {
+            await updateGuestTeam(guest.Id, team);
+            setSelectedTeam(team);
+            setShowModal(true);
+            
+            // Actualizar el guest en el estado padre
+            if (onUpdate) {
+                const updatedGuest = {
+                    ...guest,
+                    team: team,
+                };
+                onUpdate(updatedGuest);
+            }
+        } catch (error) {
+            console.error('Error al guardar el team:', error);
+            alert('Hubo un problema al guardar tu elección. Intenta de nuevo.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
     };
     return (
         <div className="text-center space-y-10 py-12 px-4 relative">
@@ -160,19 +196,29 @@ export default function Invitation({ guest }: InvitationProps) {
                         transition={{ delay: 0.4 }}
                         className="flex flex-wrap items-center justify-center gap-4 mb-8"
                     >
-                        <motion.div
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            className="px-8 py-4 bg-pink-100 text-pink-600 rounded-3xl font-bold text-lg shadow-sm border-2 border-pink-200 flex items-center gap-3"
+                        <motion.button
+                            onClick={() => handleTeamSelect(TeamStatus.PINK)}
+                            disabled={loading || !guest}
+                            whileHover={loading || !guest ? {} : { scale: 1.05, y: -2 }}
+                            whileTap={loading || !guest ? {} : { scale: 0.95 }}
+                            className={`px-8 py-4 bg-pink-100 text-pink-600 rounded-3xl font-bold text-lg shadow-sm border-2 border-pink-200 flex items-center gap-3 cursor-pointer transition-all ${
+                                loading || !guest ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md hover:bg-pink-200'
+                            } ${guest?.team === TeamStatus.PINK ? 'ring-4 ring-pink-300 ring-offset-2' : ''}`}
                         >
                             <span className="text-2xl">💖</span> TEAM ROSA
-                        </motion.div>
+                        </motion.button>
                         <span className="text-slate-300 font-bold text-2xl px-2">VS</span>
-                        <motion.div
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            className="px-8 py-4 bg-blue-100 text-blue-600 rounded-3xl font-bold text-lg shadow-sm border-2 border-blue-200 flex items-center gap-3"
+                        <motion.button
+                            onClick={() => handleTeamSelect(TeamStatus.BLUE)}
+                            disabled={loading || !guest}
+                            whileHover={loading || !guest ? {} : { scale: 1.05, y: -2 }}
+                            whileTap={loading || !guest ? {} : { scale: 0.95 }}
+                            className={`px-8 py-4 bg-blue-100 text-blue-600 rounded-3xl font-bold text-lg shadow-sm border-2 border-blue-200 flex items-center gap-3 cursor-pointer transition-all ${
+                                loading || !guest ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md hover:bg-blue-200'
+                            } ${guest?.team === TeamStatus.BLUE ? 'ring-4 ring-blue-300 ring-offset-2' : ''}`}
                         >
                             <span className="text-2xl">💙</span> TEAM AZUL
-                        </motion.div>
+                        </motion.button>
                     </motion.div>
                     
                     <motion.div
@@ -189,6 +235,15 @@ export default function Invitation({ guest }: InvitationProps) {
                     </motion.div>
                 </div>
             </motion.div>
+
+            {/* Modal de Team */}
+            {selectedTeam && (
+                <TeamModal
+                    show={showModal}
+                    team={selectedTeam}
+                    onClose={handleCloseModal}
+                />
+            )}
         </div>
     );
 }

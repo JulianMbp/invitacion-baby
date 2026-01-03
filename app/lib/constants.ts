@@ -12,6 +12,13 @@ export enum ConfirmationStatus {
   DECLINED = 3      // No podrá asistir
 }
 
+// Enum para el team elegido
+export enum TeamStatus {
+  NONE = 0,         // Sin team
+  PINK = 1,         // Team Rosa
+  BLUE = 2          // Team Azul
+}
+
 // Información del evento
 export const EVENT_INFO = {
   fecha: "Sábado, 7 de Febrero",
