@@ -22,7 +22,7 @@ import {
     UtensilsCrossed,
     X
 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Gift, Guest, getGifts, reserveGift, unreserveGift } from '../lib/nocodb';
 import { Baby, Rattle } from './icons/BabyIcons';
 
@@ -36,10 +36,25 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
     const [reservingId, setReservingId] = useState<number | null>(null);
     const [unreservingId, setUnreservingId] = useState<number | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const giftsSectionRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         loadGifts();
     }, []);
+
+    // Scroll to gifts section when category is selected (especially useful on mobile)
+    useEffect(() => {
+        if (selectedCategory && giftsSectionRef.current) {
+            // Small delay to ensure the content is rendered
+            setTimeout(() => {
+                giftsSectionRef.current?.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start',
+                    inline: 'nearest'
+                });
+            }, 100);
+        }
+    }, [selectedCategory]);
 
     const loadGifts = async () => {
         try {
@@ -314,20 +329,24 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
 
             {/* Show gifts when category is selected */}
             {selectedCategory && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                    className="mb-8"
-                >
-                    <h3 className="text-2xl font-bold text-slate-400 mb-8 text-center uppercase tracking-widest text-sm">
-                        Regalos disponibles en: <span className="text-pink-500 font-black">{selectedCategory}</span>
-                    </h3>
-                </motion.div>
-            )}
+                <div ref={giftsSectionRef} className="scroll-mt-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="mb-8"
+                    >
+                        <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-6 border-2 border-pink-200 shadow-lg mb-8">
+                            <h3 className="text-xl md:text-2xl font-bold text-slate-600 text-center uppercase tracking-wide">
+                                Regalos disponibles en:{' '}
+                                <span className="text-pink-500 font-black block mt-2 text-2xl md:text-3xl">
+                                    {selectedCategory}
+                                </span>
+                            </h3>
+                        </div>
+                    </motion.div>
 
-            {selectedCategory && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <AnimatePresence>
                         {filteredGifts.length === 0 ? (
                             <motion.div
@@ -492,6 +511,7 @@ export default function GiftRegistry({ guest }: GiftRegistryProps) {
                             })
                         )}
                     </AnimatePresence>
+                    </div>
                 </div>
             )}
         </div>
