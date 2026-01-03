@@ -21,8 +21,8 @@ export enum TeamStatus {
 
 // Información del evento
 export const EVENT_INFO = {
-  fecha: "Sábado, 7 de Febrero",
-  hora: "2:00 PM",
+  fecha: "Domingo, 8 de Febrero",
+  hora: "2:00 PM - 6:00 PM",
   lugar: "Jardín Infantil El Arte De Crecer",
   direccion: "Jardín Infantil El Arte De Crecer"
 };
