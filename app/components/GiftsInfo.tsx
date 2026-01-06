@@ -27,8 +27,11 @@ export default function GiftsInfo() {
                 </motion.div>
                 
                 <h3 className="text-2xl font-bold text-slate-700 mb-4 text-center">Lluvia de Sobres y Regalos</h3>
-                <p className="text-slate-500 leading-relaxed text-lg text-center font-medium">
+                <p className="text-slate-500 leading-relaxed text-lg text-center font-medium mb-4">
                     Tu presencia es nuestro mejor regalo. Sin embargo, si deseas tener un detalle con nuestro bebé, hemos preparado una lista de sugerencias para evitar duplicados, o también agradecemos la lluvia de sobres.
+                </p>
+                <p className="text-slate-500 leading-relaxed text-lg text-center font-medium">
+                    Si te gustaría regalar algo más y que no está en la lista, eres completamente libre de hacerlo. Estaremos plenamente agradecidos con lo que quieras regalar al bebé.
                 </p>
             </div>
         </motion.div>

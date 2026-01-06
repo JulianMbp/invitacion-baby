@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Baby, Calendar, Clock, Download, MapPin, Sparkles } from 'lucide-react';
 import { useRef } from 'react';
+import { SiGooglecalendar } from 'react-icons/si';
 import { EVENT_GOOGLE_MAPS_EMBED, EVENT_GOOGLE_MAPS_LINK } from '../lib/constants';
 import { Guest } from '../lib/nocodb';
 import { Bottle, Pacifier, Rattle, ToyBlock } from './icons/BabyIcons';
@@ -22,19 +23,48 @@ export default function InvitationCard({
     direccion = "Calle Principal 123, Ciudad",
     guest
 }: InvitationCardProps) {
+    // Función para obtener el título según el género
+    const getTitulo = () => {
+        if (!guest) return '';
+        
+        // Intentar diferentes variaciones del nombre del campo
+        const guestWithAny = guest as Guest & Record<string, unknown>;
+        const genero = guestWithAny['# genero'] || 
+                      guestWithAny['#genero'] || 
+                      guestWithAny['genero'] ||
+                      guestWithAny['Genero'] ||
+                      guestWithAny['Género'];
+        
+        // Log para debuggear
+        if (process.env.NODE_ENV === 'development') {
+            console.log('Guest object:', guest);
+            console.log('Género encontrado:', genero);
+        }
+        
+        // Convertir a número si viene como string
+        const generoNum = typeof genero === 'string' ? parseInt(genero, 10) : genero;
+        
+        // 1 = Masculino (Sr.), 2 = Femenino (Sra.)
+        if (generoNum === 1) return 'Sr.';
+        if (generoNum === 2) return 'Sra.';
+        return ''; // Si no hay género definido, no mostrar título
+    };
+
     // Función para obtener el saludo personalizado
     const getGreeting = () => {
         if (!guest) return '';
         
         const nombre = guest['Nombre Representante'];
         const integrantes = guest['N° Integrantes'] || 1;
+        const titulo = getTitulo();
+        const nombreConTitulo = titulo ? `${titulo} ${nombre}` : nombre;
         
         if (integrantes > 2) {
-            return `${nombre} y flia`;
+            return `${nombreConTitulo} y flia`;
         } else if (integrantes === 2) {
-            return `${nombre} y acompañante`;
+            return `${nombreConTitulo} y acompañante`;
         } else {
-            return nombre;
+            return nombreConTitulo;
         }
     };
     const cardRef = useRef<HTMLDivElement>(null);
@@ -65,7 +95,7 @@ export default function InvitationCard({
         // Hora fin: 18:00 (6:00 PM) - 4 horas de duración
         // Convertir a UTC: Colombia es UTC-5, entonces 14:00 local = 19:00 UTC (14+5=19)
         
-        const startDate = '20260207T190000Z'; // Formato: YYYYMMDDTHHMMSSZ (UTC)
+        const startDate = '20260208T190000Z'; // Formato: YYYYMMDDTHHMMSSZ (UTC)
         const endDate = '20260207T230000Z'; // 18:00 + 5 horas = 23:00 UTC
         const title = encodeURIComponent('Baby Shower - Julian & Mafe');
         const description = encodeURIComponent(
@@ -297,7 +327,7 @@ export default function InvitationCard({
                     className="flex-1 sm:flex-initial flex items-center justify-center gap-3 bg-white text-slate-600 px-8 py-4 rounded-full font-bold text-lg shadow-[0_10px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.1)] border-2 border-slate-100 transition-all"
                 >
                     <Download className="w-5 h-5 text-slate-400" />
-                    <span>Guardar Recuerdo</span>
+                    <span>Guardar Invitacion en PDF</span>
                 </motion.button>
 
                 {/* Botón Agregar a Calendar */}
@@ -307,8 +337,9 @@ export default function InvitationCard({
                     whileTap={{ scale: 0.95 }}
                     className="flex-1 sm:flex-initial flex items-center justify-center gap-3 bg-gradient-to-r from-pink-400 to-blue-400 text-white px-8 py-4 rounded-full font-bold text-lg shadow-[0_10px_20px_rgba(236,72,153,0.3)] hover:shadow-[0_15px_30px_rgba(236,72,153,0.4)] transition-all"
                 >
-                    <Calendar className="w-5 h-5" />
-                    <span>Agregar a Calendar</span>
+                    <span>Agregar Evento al Calendario</span>
+                    <SiGooglecalendar className="w-5 h-5" />
+
                 </motion.button>
             </motion.div>
         </motion.div>

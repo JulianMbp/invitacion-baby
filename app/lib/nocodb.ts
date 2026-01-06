@@ -4,6 +4,7 @@ export interface Guest {
     Id: number;
     'Nombre Representante': string;
     'N° Integrantes': number;
+    '# genero'?: number; // Enum: 1=Masculino (Sr.), 2=Femenino (Sra.)
     Residencia?: string;
     Celular?: string;
     correo?: string;
@@ -47,8 +48,16 @@ async function fetchAPI(endpoint: string, options: RequestInit = {}) {
 export async function getGuestById(id: string | number): Promise<Guest | null> {
     try {
         const res = await fetchAPI(`/api/v2/tables/${TABLES.GUESTS}/records/${id}`);
-        // Log the response to debug ID field structure
+        // Log the response to debug ID field structure and gender field
         console.log('Guest record from API:', res);
+        console.log('All fields in guest:', Object.keys(res || {}));
+        console.log('Gender field variations:', {
+            '# genero': res?.['# genero'],
+            '#genero': res?.['#genero'],
+            'genero': res?.genero,
+            'Genero': res?.Genero,
+            'Género': res?.['Género']
+        });
         return res;
     } catch (error) {
         console.error("Error fetching guest:", error);

@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { TeamStatus } from '../lib/constants';
 import { Guest, updateGuestTeam } from '../lib/nocodb';
 import TeamModal from './TeamModal';
-import { Baby as BabyIcon, Bottle, Pacifier } from './icons/BabyIcons';
+import { Bottle, Pacifier } from './icons/BabyIcons';
 
 interface InvitationProps {
     guest?: Guest;
@@ -17,19 +17,48 @@ export default function Invitation({ guest, onUpdate }: InvitationProps) {
     const [showModal, setShowModal] = useState(false);
     const [selectedTeam, setSelectedTeam] = useState<TeamStatus.PINK | TeamStatus.BLUE | null>(null);
     const [loading, setLoading] = useState(false);
+    // Función para obtener el título según el género
+    const getTitulo = () => {
+        if (!guest) return '';
+        
+        // Intentar diferentes variaciones del nombre del campo
+        const guestWithAny = guest as Guest & Record<string, unknown>;
+        const genero = guestWithAny['# genero'] || 
+                      guestWithAny['#genero'] || 
+                      guestWithAny['genero'] ||
+                      guestWithAny['Genero'] ||
+                      guestWithAny['Género'];
+        
+        // Log para debuggear
+        if (process.env.NODE_ENV === 'development') {
+            console.log('Guest object:', guest);
+            console.log('Género encontrado:', genero);
+        }
+        
+        // Convertir a número si viene como string
+        const generoNum = typeof genero === 'string' ? parseInt(genero, 10) : genero;
+        
+        // 1 = Masculino (Sr.), 2 = Femenino (Sra.)
+        if (generoNum === 1) return 'Sr.';
+        if (generoNum === 2) return 'Sra.';
+        return ''; // Si no hay género definido, no mostrar título
+    };
+
     // Función para obtener el saludo personalizado
     const getGreeting = () => {
         if (!guest) return '';
         
         const nombre = guest['Nombre Representante'];
         const integrantes = guest['N° Integrantes'] || 1;
+        const titulo = getTitulo();
+        const nombreConTitulo = titulo ? `${titulo} ${nombre}` : nombre;
         
         if (integrantes > 2) {
-            return `${nombre} y flia`;
+            return `${nombreConTitulo} y familia`;
         } else if (integrantes === 2) {
-            return `${nombre} y acompañante`;
+            return `${nombreConTitulo} y acompañante`;
         } else {
-            return nombre;
+            return nombreConTitulo;
         }
     };
 
@@ -109,7 +138,7 @@ export default function Invitation({ guest, onUpdate }: InvitationProps) {
                     >
                         <div className="inline-block bg-white/60 px-6 py-3 rounded-full border border-pink-100 backdrop-blur-sm shadow-sm">
                             <p className="text-lg text-slate-500 font-medium mb-1">
-                                ¡Hola! Querido{guest['N° Integrantes'] > 1 ? 's' : ''}
+                                ¡Bienvenidos a nuestra celebración!
                             </p>
                             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent tracking-tight">
                                 {getGreeting()}
@@ -150,7 +179,7 @@ export default function Invitation({ guest, onUpdate }: InvitationProps) {
                     transition={{ delay: 0.6 }}
                     className="text-slate-500 max-w-lg mx-auto leading-relaxed mt-6 text-xl font-medium"
                 >
-                    ¡Nuestro bebé está en camino y queremos celebrarlo contigo!
+                    Tenemos el agrado de invitarlos a la llegada de nuestro bebé.
                 </motion.p>
             </motion.div>
 
@@ -173,9 +202,6 @@ export default function Invitation({ guest, onUpdate }: InvitationProps) {
                         transition={{ delay: 0.2, type: "spring" }}
                         className="flex justify-center mb-8"
                     >
-                        <div className="p-6 bg-white rounded-full shadow-lg border-4 border-pink-50">
-                            <BabyIcon className="w-16 h-16 text-pink-400" />
-                        </div>
                     </motion.div>
                     
                     <h3 className="text-3xl font-bold text-slate-700 mb-4">¿Niño o Niña?</h3>
@@ -184,9 +210,19 @@ export default function Invitation({ guest, onUpdate }: InvitationProps) {
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.3 }}
-                        className="text-slate-500 mb-8 text-xl"
+                        className="text-slate-500 mb-6 text-xl"
                     >
                         ¡Es una dulce sorpresa que descubriremos juntos!
+                    </motion.p>
+                    
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.35 }}
+                        className="text-slate-400 mb-8 text-lg font-semibold"
+                    >
+                        ¡Haz clic en tu equipo favorito!
                     </motion.p>
                     
                     <motion.div
@@ -194,7 +230,7 @@ export default function Invitation({ guest, onUpdate }: InvitationProps) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.4 }}
-                        className="flex flex-wrap items-center justify-center gap-4 mb-8"
+                        className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8"
                     >
                         <motion.button
                             onClick={() => handleTeamSelect(TeamStatus.PINK)}
