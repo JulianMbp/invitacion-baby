@@ -13,11 +13,11 @@ const quicksand = Quicksand({
 const siteUrl = "https://baby-shower.julian-mbp.pro";
 
 export const metadata: Metadata = {
-  title: "Baby Shower - Julian & Maria Fernanda",
-  description: "Invitación al baby shower de Julian Bastidas y Maria Fernanda Delgado",
+  title: "Baby Shower - Julian & María Fernanda",
+  description: "Invitación al baby shower de Julian Bastidas y María Fernanda Delgado",
   openGraph: {
-    title: "Baby Shower - Julian & Maria Fernanda",
-    description: "Invitación al baby shower de Julian Bastidas y Maria Fernanda Delgado",
+    title: "Baby Shower - Julian & María Fernanda",
+    description: "Invitación al baby shower de Julian Bastidas y María Fernanda Delgado",
     url: siteUrl,
     siteName: "Baby Shower Invitation",
     images: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         url: `${siteUrl}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: "Baby Shower - Julian & Maria Fernanda",
+        alt: "Baby Shower - Julian & María Fernanda",
       },
     ],
     locale: "es_ES",
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Baby Shower - Julian & Maria Fernanda",
-    description: "Invitación al baby shower de Julian Bastidas y Maria Fernanda Delgado",
+    title: "Baby Shower - Julian & María Fernanda",
+    description: "Invitación al baby shower de Julian Bastidas y María Fernanda Delgado",
     images: [`${siteUrl}/og-image.jpg`],
   },
   metadataBase: new URL(siteUrl),

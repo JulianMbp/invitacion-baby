@@ -170,7 +170,7 @@ export default function Invitation({ guest, onUpdate }: InvitationProps) {
                 >
                     Julian Bastidas<br />
                     <span className="text-4xl md:text-5xl lg:text-6xl text-pink-400">&</span><br />
-                    Maria Fernanda Delgado
+                    María Fernanda Delgado
                 </motion.h1>
                 
                 <motion.p

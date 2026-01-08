@@ -444,44 +444,33 @@ class NocoDBWhatsAppGenerator:
         # Construir URL única (usar ID como código)
         url_invitacion = f"{URL_BASE_PLATAFORMA}"
         
-        # Generar mensaje completo
+        # Generar mensaje completo (versión optimizada para marketing)
         mensaje = f"""👶✨ ¡Hola {saludo}! ✨👶
 
-¡Estamos muy emocionados de compartir contigo una noticia muy especial! 🎉
+🎉 *¡Tienes una invitación especial esperándote!* 🎉
 
-Te invitamos cordialmente a celebrar con nosotros nuestro Baby Shower 🎈
-
-📅 *Fecha:* Domingo, 8 de Febrero
-🕐 *Hora:* 2:00 PM - 6:00 PM
-📍 *Lugar:* Jardín Infantil El Arte De Crecer
-📋 *Tu código único:* {guest_id}
+📅 *Domingo, 8 de Febrero*
+🕐 *2:00 PM - 6:00 PM*
+📍 *Jardín Infantil El Arte De Crecer*
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🌟 *¿Cómo ingresar a tu invitación digital?* 🌟
+🚀 *Accede a tu invitación digital en 2 pasos:*
 
-1️⃣ Abre el siguiente enlace en tu navegador:
-   {url_invitacion}
+1️⃣ Abre: {url_invitacion}
 
-2️⃣ Ingresa tu *código único de invitación* que recibiste en este mensaje
-📋 *Tu código único de invitación:* {guest_id}
+2️⃣ Ingresa tu código: *{guest_id}*
 
-3️⃣ ¡Listo! Podrás ver tu invitación personalizada, confirmar tu asistencia, elegir tu equipo (¿Rosa o Azul? 💗💙) y ver nuestro registro de regalos
+✨ *¡Y listo!* Podrás confirmar tu asistencia, elegir tu equipo (Rosa o Azul 💗💙) y ver nuestro registro de regalos.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💝 Tu presencia es el mejor regalo, pero si deseas obsequiarnos algo, encontrarás opciones en nuestra plataforma digital.
+💝 Tu presencia es nuestro mejor regalo 💕
 
-🎊 ¡Esperamos celebrar este momento tan especial contigo!
+Con cariño,
+Julian & María Fernanda 👶✨
 
-Con mucho cariño,
-Julian & Maria Fernanda 💕
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-*Nota:* Si tienes alguna duda o problema para ingresar, no dudes en escribirnos. ¡Estamos aquí para ayudarte! 😊
-
-"""
+💬 ¿Dudas? Escríbenos, estamos aquí para ayudarte 😊"""
         
         return mensaje
     
