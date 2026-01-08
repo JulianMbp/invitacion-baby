@@ -449,11 +449,17 @@ class NocoDBWhatsAppGenerator:
 
 🎉 *¡Estás invitado/a a nuestro Baby Shower!* 🎉
 
-Te esperamos para celebrar este momento tan especial con nosotros 🎈
+Será un día lleno de ternura, para recibir a nuestro sol de la casa. ¡Qué alegría tu llegada! 💕
+
+Queremos que seas parte de este momento tan especial mientras celebramos la llegada de nuestro pequeño/a 🌟
 
 📅 *Domingo, 8 de Febrero*
 🕐 *2:00 PM - 6:00 PM*
 📍 *Jardín Infantil El Arte De Crecer*
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⏰ *IMPORTANTE: Confirma tu asistencia antes del 24 de enero de 2026* ⏰
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -469,7 +475,7 @@ Te esperamos para celebrar este momento tan especial con nosotros 🎈
 
 💝 Tu presencia es nuestro mejor regalo 💕
 
-Con cariño,
+Con todo nuestro cariño,
 Julian & María Fernanda 👶✨
 
 💬 ¿Dudas? Escríbenos, estamos aquí para ayudarte 😊"""

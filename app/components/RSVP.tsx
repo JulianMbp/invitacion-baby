@@ -2,7 +2,7 @@
 
 import confetti from 'canvas-confetti';
 import { motion } from 'framer-motion';
-import { Calendar, Check, Heart, X } from 'lucide-react';
+import { Calendar, Check, Clock, Heart, X } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmationStatus } from '../lib/constants';
 import { Guest, confirmGuestAttendance } from '../lib/nocodb';
@@ -176,10 +176,31 @@ export default function RSVP({ guest, onUpdate }: RSVPProps) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
-                    className="text-slate-500 mb-10 text-xl"
+                    className="text-slate-500 mb-6 text-xl"
                 >
                     ¿Podrás acompañarnos en este día especial?
                 </motion.p>
+
+                {/* Fecha límite de confirmación */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="mb-10 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-6 shadow-lg"
+                >
+                    <div className="flex items-center justify-center gap-3 mb-3">
+                        <Clock className="w-6 h-6 text-amber-600" />
+                        <h4 className="text-lg font-bold text-amber-800 uppercase tracking-wide">
+                            Fecha Límite
+                        </h4>
+                    </div>
+                    <p className="text-2xl md:text-3xl font-black text-amber-700 mb-2">
+                        24 de Enero de 2026
+                    </p>
+                    <p className="text-sm text-amber-600 font-semibold">
+                        Por favor confirma tu asistencia antes de esta fecha
+                    </p>
+                </motion.div>
 
                 {!selectingIntegrantes ? (
                     <div className="flex flex-col sm:flex-row gap-5 justify-center">
