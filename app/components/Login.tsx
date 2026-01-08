@@ -120,7 +120,7 @@ export default function Login({ onLogin }: LoginProps) {
                             pattern="[0-9]*"
                             value={id}
                             onChange={(e) => setId(e.target.value.replace(/\D/g, ''))}
-                            placeholder="Tu código aquí"
+                            placeholder="Tu código único de invitación"
                             className="w-full px-6 py-4 rounded-full border-2 border-pink-100 focus:border-pink-300 focus:ring-4 focus:ring-pink-50 outline-none transition-all text-center text-xl text-slate-700 placeholder:text-slate-400 font-bold bg-pink-50/50"
                             required
                         />
