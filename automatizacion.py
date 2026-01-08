@@ -447,7 +447,9 @@ class NocoDBWhatsAppGenerator:
         # Generar mensaje completo (versión optimizada para marketing)
         mensaje = f"""👶✨ ¡Hola {saludo}! ✨👶
 
-🎉 *¡Tienes una invitación especial esperándote!* 🎉
+🎉 *¡Estás invitado/a a nuestro Baby Shower!* 🎉
+
+Te esperamos para celebrar este momento tan especial con nosotros 🎈
 
 📅 *Domingo, 8 de Febrero*
 🕐 *2:00 PM - 6:00 PM*
