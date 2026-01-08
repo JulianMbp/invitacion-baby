@@ -13,7 +13,7 @@ const quicksand = Quicksand({
 const siteUrl = "https://baby-shower.julian-mbp.pro";
 
 export const metadata: Metadata = {
-  title: "Baby Shower - Julian & María Fernanda",
+  title: "Baby Shower",
   description: "Invitación al baby shower de Julian Bastidas y María Fernanda Delgado",
   openGraph: {
     title: "Baby Shower - Julian & María Fernanda",
